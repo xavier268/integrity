@@ -10,6 +10,9 @@ env:
     sh: 'if [ "$(go env GOOS)" = "windows" ]; then echo "Powershell Start-Process "; else echo "xdg-open"; fi'
   DATE: # date string
     sh: 'if [ "$(go env GOOS)" = "windows" ]; then echo "$(Powershell Get-Date -Format s)"; else echo "$(date -Iseconds)"; fi'
+  VERSION: # program version
+    sh: go run ./sign -v
+ 
 
 
 tasks:
@@ -68,7 +71,7 @@ tasks:
       - example
     cmds:
       - go test ./...
-      - ./bin/sign{{.EXE}} -p me ./bin/example{{.EXE}} # implement "me" as password
-      - ./bin/signed-example{{.EXE}} -p me
-      - ./bin/signed-example{{.EXE}} -p fail # should fail
+      - ./bin/sign{{.EXE}} -p okpass ./bin/example{{.EXE}} # implement "me" as password
+      - ./bin/signed-example{{.EXE}} -p okpass # should be ok
+      - ./bin/signed-example{{.EXE}} -p failpass # should fail
       - ./bin/example{{.EXE}} -p me # should fail

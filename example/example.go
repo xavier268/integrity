@@ -1,9 +1,9 @@
+// example of validating access to a simple program
 package main
 
 import (
 	"flag"
 	"fmt"
-	"os"
 
 	"github.com/xavier268/integrity"
 )
@@ -18,13 +18,13 @@ func main() {
 
 	flag.Parse()
 
-	fmt.Println("Hello Word")
-	fmt.Println(os.Args[0])
-
-	if integrity.IsValid(passw) { // validate credentials
-		fmt.Println("Access IS be granted")
-	} else { // sign with credentials
-		fmt.Println("Access CANNOT be granted")
+	if !integrity.IsValid(passw) { // validate credentials
+		fmt.Println("Access is denied")
+		return
 	}
+
+	// Access is granted !
+	fmt.Println("Access IS granted")
+	// ... do things ...
 
 }

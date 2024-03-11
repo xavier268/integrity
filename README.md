@@ -4,40 +4,70 @@ Sign a binary or check it from inside the executable.
 ## How to use it
 
 
-1. Build everything
+### Build the signing tool
 
 ````
 task build
 
 ````
    
-    
-2. Create you binary, importing this package, an implementing signing validation process.
+### Create you binary as usual, importing this package, an validating the porvided credential
+
+For instance, main could start like this :
 
 ````
 
-import github.com/xavier268/integrity
 
-// Typical implementation of a signed binary
+import (
+	"flag"
+	"fmt"
+	"os"
 
-// Upon launch, read credentials from command line, then check it
-if ! IsValid(credentials string) {
-    panic("The provided credetials are invalid")
+	"github.com/xavier268/integrity"
+)
+
+var passw string
+
+func init() {
+	flag.StringVar(&passw, "p", "", "access password")
 }
 
+func main() {
+
+    // read password from command line
+	flag.Parse()
+
+    // validate credentials
+	if !integrity.IsValid(passw) { 
+		fmt.Println("Access is denied")
+		return
+	}
+
+	// Access is granted !
+	fmt.Println("Access IS granted")
+	// ... do things ...
+
+}
+
+
 ````
 
-3. Use the "sign" tool to sign the built binary
+### Use the "sign" tool to sign the built binary
+
+**Caution** : I would make sens to include the signing process into your build pipeline.
+Without a correct credential setup, the executable will refuse to launch.
 
 ````
 
-$> sign.exe -p "credentials" "path/to/unsignadebinary" [ "path/to/signedbinary" ]
+$> sign.exe [ -p "credentials" -o "path/to/signedoutputbinary" ]  "path/to/unsignadebinary" 
 
 ````
 
-4. Use the signed and secured copy of the binary. 
+**Note** : it is ok to set the output filename to the input filename to modify executable in place.
+
+### Use the signed and secured copy of the binary. 
    
     * The signed copy will only load with a valid credential
-    * If a single byte of the binary is modified, it will refuse to run
-    * The executable file can be renamed or moved freely
-    * The credentials do not appear in clear in the binary code.
+    * If a single byte of the binary is modified, added or removed, it will refuse to run
+    * The signed executable file can be renamed or moved freely
+    * Obviously, no credentials can be extracted from the binary code.

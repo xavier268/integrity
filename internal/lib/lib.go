@@ -1,5 +1,5 @@
-// contains highlevel command for (self)signing binaries or validating signatures.
-package integrity
+// internal librairies for signing or validating signatures for access contriol to binaries
+package lib
 
 import (
 	"bytes"
@@ -14,6 +14,7 @@ const (
 	// actual payload size
 	payloadSize = sha512.Size
 	VERSION     = "0.3"
+	COPYRIGHT   = "(c) Xavier Gandillot 2024"
 )
 
 // reserved space to store signature.
@@ -51,9 +52,11 @@ func sign(data []byte, credentials string) {
 	// split around delimiter
 	dd := bytes.Split(data, []byte(reserve)[:delimSize])
 	if len(dd) != 2 {
+		fmt.Println("This file does not seem to import the integrity package. It cannot be signed nor validated.")
 		panic(len(dd))
 	}
 	if len(dd[1]) < payloadSize {
+		fmt.Println("Invalid binary file format.")
 		panic(len(dd[1]))
 	}
 
@@ -80,14 +83,11 @@ func isValid(data []byte, credentials string) bool {
 	// split around delimiter
 	dd := bytes.Split(data, []byte(reserve)[:delimSize])
 	if len(dd) != 2 {
-		// // debug
-		// fmt.Println("Return split : ", len(dd))
-		// for i, d := range dd {
-		// 	fmt.Println("Split ", i, ")\t", string(d))
-		// }
+		fmt.Printf("Internal validating error.")
 		panic(len(dd))
 	}
 	if len(dd[1]) < payloadSize {
+		fmt.Printf("Invalid binary file format.")
 		panic(len(dd[1]))
 	}
 
@@ -102,22 +102,14 @@ func isValid(data []byte, credentials string) bool {
 	return bytes.Equal(
 		data[len(dd[0])+delimSize:len(dd[0])+delimSize+payloadSize],
 		sig)
-
-}
-
-// Produce a signed binary with provided credentials from running binary
-func Sign(credentials string) (newFileName string) {
-	in := MustAbs(os.Args[0])
-	dir, out := filepath.Split(in)
-	out = filepath.Join(dir, "signed-"+out)
-	return SignBinary(in, out, credentials)
 }
 
 // Produce a signed binary with provided credentials from provided binary
 func SignBinary(sourceBinaryFileName string, targetBinaryFileName string, credentials string) (newTargetFileName string) {
+
 	sourceBinaryFileName = MustAbs(sourceBinaryFileName)
 
-	// load binary data
+	// load source binary data
 	f, err := os.Open(sourceBinaryFileName)
 	if err != nil {
 		fmt.Printf("Cannot open source name : %s\n", sourceBinaryFileName)
@@ -126,9 +118,10 @@ func SignBinary(sourceBinaryFileName string, targetBinaryFileName string, creden
 	defer f.Close()
 	data, err := io.ReadAll(f)
 	if err != nil {
-		fmt.Println("Cannot read ", MustAbs(sourceBinaryFileName))
+		fmt.Println("Cannot read from ", MustAbs(sourceBinaryFileName))
 		panic(err)
 	}
+
 	// actual signing
 	sign(data, credentials)
 

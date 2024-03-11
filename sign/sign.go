@@ -4,38 +4,46 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
+	"path/filepath"
 
-	"github.com/xavier268/integrity"
+	"github.com/xavier268/integrity/internal/lib"
 )
 
 var (
 	credential string
 	infile     string
 	outfile    string
+	version    bool
 )
 
 func init() {
 	flag.StringVar(&credential, "p", "", "specify credential string")
 	flag.StringVar(&outfile, "o", "", "specify output file")
+	flag.BoolVar(&version, "v", false, "print version and exit")
 
 	flag.Usage = func() {
-		fmt.Printf("Usage of sign (version %s)\n", integrity.VERSION)
-		fmt.Println("sign [ -p credentials -o outputFile ] inputFile")
+		fmt.Printf("Usage of %s (version %s) - %s :\n", filepath.Base(os.Args[0]), lib.VERSION, lib.COPYRIGHT)
+		fmt.Printf("%s [ -p credentials -o outputFile ] inputFile\n\n", filepath.Base(os.Args[0]))
 		flag.PrintDefaults()
 	}
 }
 
 func main() {
 	flag.Parse()
+	if version {
+		fmt.Println(lib.VERSION)
+		return
+	}
 	aa := flag.Args()
 	if len(aa) != 1 || (len(aa) == 1 && len(aa[0]) == 0) {
 		fmt.Println("There should be exactly one filename to sign")
 		flag.Usage()
 		return
 	} else {
-		infile = integrity.MustAbs(aa[0])
+		infile = lib.MustAbs(aa[0])
 	}
 
-	saved := integrity.SignBinary(infile, outfile, credential)
+	saved := lib.SignBinary(infile, outfile, credential)
 	fmt.Println("Saved signed binary to :", saved)
 }

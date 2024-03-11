@@ -1,4 +1,4 @@
-package integrity
+package lib
 
 import (
 	"fmt"
@@ -10,21 +10,29 @@ import (
 func TestSignValid(t *testing.T) {
 
 	data := []byte("FIRST PART" + reserve + "SECOND PART")
-	fmt.Println("Data : ", string(data))
-	fmt.Println("Delimiter :", string([]byte(reserve)[:delimSize]))
+	// fmt.Println("Data : ", string(data))
+	// fmt.Println("Delimiter :", string([]byte(reserve)[:delimSize]))
 
 	if isValid(data, "password") {
 		t.Error("should not be signed already")
 	}
+	if isValid(data, "") {
+		t.Error("should not be signed already")
+	}
+
+	// signing !
 	sign(data, "password")
-	fmt.Println("Signature performed")
-	fmt.Println(string(data))
+	// fmt.Println("Signature performed")
+	// fmt.Println(string(data))
 
 	if !isValid(data, "password") {
 		t.Error("cannot confirm signature")
 	}
 	if isValid(data, "wrong password") {
-		t.Error("should noyt accept invalid credentials")
+		t.Error("should not accept invalid credentials")
+	}
+	if isValid(data, "") {
+		t.Error("should not accept invalid credentials")
 	}
 
 }

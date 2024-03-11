@@ -37,10 +37,10 @@ func init() {
 
 func main() {
 
-    // read password from command line
+    	// read password from command line
 	flag.Parse()
 
-    // validate credentials
+    	// validate credentials
 	if !integrity.IsValid(passw) { 
 		fmt.Println("Access is denied")
 		return

@@ -16,7 +16,10 @@ const (
 
 // reserved space to store signature.
 // it contains a delimiter, followed by actual payload
-const reserve = `ermjhmlmeakrjpppppppppdgqdqdggqdgé"'654mlkjmlzeiurùpoizurùthpmoiùzmtklmLk534zrht35z4rhg43bvzerglkmzjergùmxxx`
+const reserve = `dfvmlk!jqer$£pàç_"'l_ npàç'_(- n^àç_5
+	4qze'y(àçç,  56z7-y54354erth.354erth3654 ni)àçàz')
+	peoirtpoziertùpoizerùtpoizeprùoiùpoizer,)àç'(-àçf)
+	çà_è(éàçnnn ==)é&)à²)ezp===)==)à=)"'("'----'(-'é(à`
 
 var (
 	// delimiter size

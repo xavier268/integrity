@@ -18,7 +18,7 @@ task build
 
 For instance, main could start like this :
 
-````
+```go
 
 
 import (
@@ -53,7 +53,7 @@ func main() {
 }
 
 
-````
+```
 
 ### Use the "sign" tool to sign the built binary
 

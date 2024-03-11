@@ -1,5 +1,8 @@
 # integrity
-Sign a binary or check it from inside the executable.
+
+[![Go Reference](https://pkg.go.dev/badge/github.com/xavier268/integrity.svg)](https://pkg.go.dev/github.com/xavier268/integrity) [![Go Report Card](https://goreportcard.com/badge/github.com/xavier268/integrity)](https://goreportcard.com/report/github.com/xavier268/integrity)
+
+Sign a binary or validate if it should run.
 
 ## How to use it
 

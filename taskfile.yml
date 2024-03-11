@@ -1,1 +1,74 @@
 version: "3"
+
+
+env:
+  GOOS: # windows or linux ?
+    sh: go env GOOS
+  EXE: # executable extension (.exe or nothing)
+    sh: 'if [ "$(go env GOOS)" = "windows" ]; then echo ".exe"; else echo ""; fi'
+  BROWSER: # browser to open  page
+    sh: 'if [ "$(go env GOOS)" = "windows" ]; then echo "Powershell Start-Process "; else echo "xdg-open"; fi'
+  DATE: # date string
+    sh: 'if [ "$(go env GOOS)" = "windows" ]; then echo "$(Powershell Get-Date -Format s)"; else echo "$(date -Iseconds)"; fi'
+
+
+tasks:
+  default:
+    desc: default task will display task menu
+    cmds:
+      - task --list-all
+
+  godoc: 
+    desc: launch godoc viewer and open browser page on windows
+    cmds:     
+      - go install golang.org/x/tools/cmd/godoc@latest     
+      - $( {{.BROWSER }} "http://localhost:6060" )
+      - echo "Press Ctrl-c to exit the task" 
+      - godoc -http :6060
+
+  build:
+    desc: build sign utility
+    sources: # what triggers rebuild
+      - ./**/*go
+    cmds:
+      - go mod tidy
+      - go build -o bin/sign{{.EXE}} ./sign
+
+  example:
+    desc: run example
+    deps:
+      - build
+    cmds:
+      - go build -o bin/example{{.EXE}}  ./example
+
+  clean: 
+    desc: clean caches and binaries, and test dirs
+    deps : # dependencies tasks will run in parallel
+      - clean-linux
+      - clean-windows
+
+  clean-linux:
+    internal: true
+    platforms: [linux]
+    cmds:
+      - rm -rf bin/
+      - rm -rf .task/
+
+  clean-windows:
+    internal: true
+    platforms: [windows]
+    cmds:
+      - Powershell Remove-Item bin -Recurse
+      - Powershell Remove-Item .task -Recurse 
+
+  test:
+    desc: run tests
+    deps:
+      - build
+      - example
+    cmds:
+      - go test ./...
+      - ./bin/sign{{.EXE}} -p me ./bin/example{{.EXE}} # implement "me" as password
+      - ./bin/signed-example{{.EXE}} -p me
+      - ./bin/signed-example{{.EXE}} -p fail # should fail
+      - ./bin/example{{.EXE}} -p me # should fail

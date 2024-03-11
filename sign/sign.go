@@ -1,4 +1,4 @@
-// Sign command to sign an existing biray that imports the integrity package.
+// Sign command to sign an existing binary. The binary should already import the integrity package.
 package main
 
 import (

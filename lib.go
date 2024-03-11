@@ -42,20 +42,6 @@ func loadData() (data []byte) {
 	return data
 }
 
-/*
-func saveData(data []byte) (newfilename string) {
-	dir, file := filepath.Split(os.Args[0])
-	saveFile := filepath.Join(dir, "signed-"+file)
-	f, err := os.Create(saveFile)
-	if err != nil {
-		panic(err)
-	}
-	defer f.Close()
-	f.Write(data)
-	return saveFile
-}
-*/
-
 // replace payload in place with signature, using provided credentials.
 func sign(data []byte, credentials string) {
 
@@ -168,6 +154,7 @@ func IsValid(credentials string) bool {
 	return isValid(data, credentials)
 }
 
+// Get Absolute file path.
 func MustAbs(fn string) string {
 	abs, err := filepath.Abs(fn)
 	if err != nil {

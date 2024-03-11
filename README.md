@@ -14,7 +14,7 @@ task build
 
 ````
    
-### Create you binary as usual, importing this package, an validating the porvided credential
+### Create you binary as usual, importing this package, an validating the provided credential
 
 For instance, main could start like this :
 

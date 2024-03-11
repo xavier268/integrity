@@ -9,10 +9,10 @@ Sign a binary or validate if it should run.
 
 ### Build the signing tool
 
-````
+```bash
 task build
 
-````
+```
    
 ### Create you binary as usual, importing this package, an validating the provided credential
 
@@ -60,11 +60,11 @@ func main() {
 **Caution** : I would make sens to include the signing process into your build pipeline.
 Without a correct credential setup, the executable will refuse to launch.
 
-````
+```bash
 
-$> sign.exe [ -p "credentials" -o "path/to/signedoutputbinary" ]  "path/to/unsignadebinary" 
+sign.exe [ -p "credentials" -o "path/to/signedoutputbinary" ]  "path/to/unsignadebinary" 
 
-````
+```
 
 **Note** : it is ok to set the output filename to the input filename to modify executable in place.
 

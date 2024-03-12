@@ -19,12 +19,12 @@ func main() {
 	flag.Parse()
 
 	if !integrity.IsValid(passw) { // validate credentials
-		fmt.Println("Access is denied")
+		fmt.Println("Access is DENIED")
 		return
 	}
 
 	// Access is granted !
-	fmt.Println("Access IS granted")
+	fmt.Println("Access is GRANTED")
 	// ... do things ...
 
 }

@@ -44,6 +44,6 @@ func main() {
 		infile = lib.MustAbs(aa[0])
 	}
 
-	saved := lib.SignBinary(infile, outfile, credential)
+	saved := lib.SignBinary(infile, outfile, credential, nil)
 	fmt.Println("Saved signed binary to :", saved)
 }

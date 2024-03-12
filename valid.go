@@ -11,5 +11,5 @@ const (
 
 // Should access be granted ?
 func IsValid(credentials string) bool {
-	return lib.IsValid(credentials)
+	return lib.IsValid(credentials, nil)
 }

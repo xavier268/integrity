@@ -1,6 +1,8 @@
 package lib
 
 import (
+	"crypto/ecdsa"
+	"crypto/x509"
 	"fmt"
 	"math/rand"
 	"testing"
@@ -9,30 +11,58 @@ import (
 
 func TestSignValid(t *testing.T) {
 
-	data := []byte("FIRST PART" + reserve + "SECOND PART")
-	// fmt.Println("Data : ", string(data))
-	// fmt.Println("Delimiter :", string([]byte(reserve)[:delimSize]))
+	var pubK *ecdsa.PublicKey
+	var privK *ecdsa.PrivateKey
+	var ok bool
+	var err error
 
-	if isValid(data, "password") {
-		t.Error("should not be signed already")
-	}
-	if isValid(data, "") {
-		t.Error("should not be signed already")
-	}
+	for i := 0; i < 2; i++ {
 
-	// signing !
-	sign(data, "password")
-	// fmt.Println("Signature performed")
-	// fmt.Println(string(data))
+		fmt.Println("\nKeys are :")
+		fmt.Println(privK)
+		fmt.Println(pubK)
 
-	if !isValid(data, "password") {
-		t.Error("cannot confirm signature")
-	}
-	if isValid(data, "wrong password") {
-		t.Error("should not accept invalid credentials")
-	}
-	if isValid(data, "") {
-		t.Error("should not accept invalid credentials")
+		data := []byte("FIRST PART" + reserve + "SECOND PART")
+		// fmt.Println("Data : ", string(data))
+		// fmt.Println("Delimiter :", string([]byte(reserve)[:delimSize]))
+
+		if isValid(data, "password", pubK) {
+			t.Error("should not be signed already")
+		}
+		if isValid(data, "", pubK) {
+			t.Error("should not be signed already")
+		}
+
+		// signing !
+		sign(data, "password", privK)
+		// fmt.Println("Signature performed")
+		// fmt.Println(string(data))
+
+		if !isValid(data, "password", pubK) {
+			t.Error("cannot confirm signature")
+		}
+		if isValid(data, "wrong password", pubK) {
+			t.Error("should not accept invalid credentials")
+		}
+		if isValid(data, "", pubK) {
+			t.Error("should not accept invalid credentials")
+		}
+
+		privDer, pubDer := GenerateKeys()
+		// Parse private and public keys
+		privK, err = x509.ParseECPrivateKey(privDer)
+		if err != nil {
+			panic(err)
+		}
+		ppubK, err := x509.ParsePKIXPublicKey(pubDer)
+		if err != nil {
+			panic(err)
+		}
+		pubK, ok = ppubK.(*ecdsa.PublicKey)
+		if !ok {
+			panic("invalid public key")
+		}
+
 	}
 
 }

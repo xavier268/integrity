@@ -3,8 +3,6 @@ package valid
 
 // include this package to be able to verify access can be granted.
 import (
-	"fmt"
-
 	"github.com/xavier268/integrity/internal/lib"
 
 	_ "embed"
@@ -25,7 +23,7 @@ var pubDer []byte
 // Should access be granted ?
 func IsValid(credentials string) bool {
 	if len(pubDer) == 0 {
-		fmt.Println("No public key found. Using hash without encryption.")
+		// fmt.Println("No public key found. Using hash without encryption.")
 		pubDer = nil
 	}
 

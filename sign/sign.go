@@ -15,12 +15,14 @@ var (
 	infile     string
 	outfile    string
 	version    bool
+	genkey     bool
 )
 
 func init() {
 	flag.StringVar(&credential, "p", "", "specify credential string")
 	flag.StringVar(&outfile, "o", "", "specify output file")
 	flag.BoolVar(&version, "v", false, "print version and exit")
+	flag.BoolVar(&genkey, "g", false, "generate a new key pair and exit")
 
 	flag.Usage = func() {
 		fmt.Printf("Usage of %s (version %s) - %s :\n", filepath.Base(os.Args[0]), lib.VERSION, lib.COPYRIGHT)
@@ -34,6 +36,9 @@ func main() {
 	if version {
 		fmt.Println(lib.VERSION)
 		return
+	}
+	if genkey {
+		panic("todo")
 	}
 	aa := flag.Args()
 	if len(aa) != 1 || (len(aa) == 1 && len(aa[0]) == 0) {

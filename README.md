@@ -81,3 +81,4 @@ sign.exe [ -p "credentials" -o "path/to/signedoutputbinary" ]  "path/to/unsignad
 Think about the API to generate/use the private/public keypairs needed ?
 * have a task to generate them as separate files that can be embedded as values in Sign (private key) and Integrity (public key) ?
 * generate them in a separate directy (internal) - embed this dir as a FS and check if the key files are available or not ?
+* hide visibility of keys outside lib ?

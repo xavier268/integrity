@@ -1,3 +1,3 @@
 module github.com/xavier268/integrity
 
-go 1.22.1
+go 1.22

@@ -74,3 +74,10 @@ sign.exe [ -p "credentials" -o "path/to/signedoutputbinary" ]  "path/to/unsignad
     * If a single byte of the binary is modified, added or removed, it will refuse to run
     * The signed executable file can be renamed or moved freely
     * Obviously, no credentials can be extracted from the binary code.
+
+
+# TODO
+
+Think about the API to generate/use the private/public keypairs needed ?
+* have a task to generate them as separate files that can be embedded as values in Sign (private key) and Integrity (public key) ?
+* generate them in a separate directy (internal) - embed this dir as a FS and check if the key files are available or not ?

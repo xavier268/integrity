@@ -25,4 +25,4 @@ go.work
 .task/**/*
 bin/
 bin/**/*
-*.der
+

@@ -22,4 +22,6 @@ go.work
 
 # application specific
 .task/
+.task/**/*
 bin/
+bin/**/*

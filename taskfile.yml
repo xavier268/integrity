@@ -57,13 +57,17 @@ tasks:
     cmds:
       - rm -rf bin/
       - rm -rf .task/
+      - $(> "valid/pub.der")
+      - $(> "sign/sec.der")
 
   clean-windows:
     internal: true
     platforms: [windows]
     cmds:
       - Powershell Remove-Item bin -Recurse
-      - Powershell Remove-Item .task -Recurse 
+      - Powershell Remove-Item .task -Recurse
+      - Powershell Clear-Content valid/pub.der
+      - Powershell Clear-Content sign/sec.der
 
   test:
     desc: run tests

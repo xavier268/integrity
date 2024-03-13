@@ -2,6 +2,7 @@
 package main
 
 import (
+	_ "embed"
 	"flag"
 	"fmt"
 	"os"
@@ -9,6 +10,13 @@ import (
 
 	"github.com/xavier268/integrity/internal/lib"
 )
+
+// imort the secret key in der format.
+// The file can be completely empty, in which case,
+// the hash is directly used without encryption.
+//
+//go:embed sec.der
+var secDer []byte
 
 var (
 	credential string
@@ -49,6 +57,10 @@ func main() {
 		infile = lib.MustAbs(aa[0])
 	}
 
-	saved := lib.SignBinary(infile, outfile, credential, nil)
+	if len(secDer) == 0 {
+		fmt.Println("No secret key provided, using the hash directly")
+		secDer = nil
+	}
+	saved := lib.SignBinary(infile, outfile, credential, secDer)
 	fmt.Println("Saved signed binary to :", saved)
 }

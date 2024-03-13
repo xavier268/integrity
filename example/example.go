@@ -5,7 +5,7 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/xavier268/integrity"
+	"github.com/xavier268/integrity/valid"
 )
 
 var passw string
@@ -18,7 +18,7 @@ func main() {
 
 	flag.Parse()
 
-	if !integrity.IsValid(passw) { // validate credentials
+	if !valid.IsValid(passw) { // validate credentials
 		fmt.Println("Access is DENIED")
 		return
 	}

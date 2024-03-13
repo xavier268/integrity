@@ -7,6 +7,7 @@ import (
 	"crypto/rand"
 	"crypto/sha512"
 	"crypto/x509"
+
 	"fmt"
 	"io"
 	"os"
@@ -28,8 +29,8 @@ var (
 	// enough for a der encoded P-256 signature that starts with 64bytes,
 	// plus der encoding overhead, so less than 80,
 	// while at least enough for the sha512 hash.
-	// Plus the length of what is stored, on size(int32) bytes, ie 4 bytes.
-	payloadSize = 4 + max(80, sha512.Size)
+	// Plus the length of what is stored, in 2 bytes.
+	payloadSize = 2 + max(80, sha512.Size)
 	// delimiter size
 	delimSize = len([]byte(reserve)) - payloadSize
 )
@@ -100,8 +101,6 @@ func sign(data []byte, credentials string, pk *ecdsa.PrivateKey) {
 	var buf [4]byte
 	buf[0] = byte(len(sig))
 	buf[1] = byte(len(sig) >> 8)
-	buf[2] = byte(len(sig) >> 16)
-	buf[3] = byte(len(sig) >> 24)
 	sig = append(buf[:], sig...)
 
 	// replace signature in place
@@ -135,7 +134,7 @@ func isValid(data []byte, credentials string, pk *ecdsa.PublicKey) bool {
 	sig := data[len(dd[0])+delimSize : len(dd[0])+delimSize+payloadSize]
 
 	// extract signature from payload. The first 4 bytes represents the length.
-	l := int(sig[0]) | int(sig[1])<<8 | int(sig[2])<<16 | int(sig[3])<<24
+	l := int(sig[0]) | int(sig[1])<<8
 	if l > payloadSize {
 		// invalid length. Don't even try ...
 		return false

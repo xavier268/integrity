@@ -8,7 +8,7 @@ import (
 )
 
 // Generate asymetric, der encoded, signing keys
-func GenerateKeys() (privDer []byte, pubDer []byte) {
+func GenerateKeys() (privDer []byte) {
 
 	privateKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	if err != nil {
@@ -21,11 +21,23 @@ func GenerateKeys() (privDer []byte, pubDer []byte) {
 		panic(err)
 	}
 
-	// Convertir la clé publique ECDSA en ASN.1 DER encodé
-	pubDer, err = x509.MarshalPKIXPublicKey(&privateKey.PublicKey)
+	return privDer
+}
+
+// Derive public key from private key
+func DerivePubKey(secKeyDer []byte) (pubKeyDer []byte) {
+	if len(secKeyDer) == 0 {
+		return nil
+	}
+	privateKey, err := x509.ParseECPrivateKey(secKeyDer)
 	if err != nil {
 		panic(err)
 	}
 
-	return privDer, pubDer
+	pubKeyDer, err = x509.MarshalPKIXPublicKey(&privateKey.PublicKey)
+	if err != nil {
+		panic(err)
+	}
+
+	return pubKeyDer
 }

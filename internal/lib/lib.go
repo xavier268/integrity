@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	VERSION   = "0.4"
+	VERSION   = "0.5"
 	COPYRIGHT = "(c) Xavier Gandillot 2024"
 )
 
@@ -227,4 +227,13 @@ func Hash(datas ...[]byte) []byte {
 		h.Write(data)
 	}
 	return h.Sum(nil)
+}
+
+func KeyId(pubDer []byte) string {
+	if len(pubDer) == 0 {
+		return "no-key"
+	}
+	res := Hash(pubDer)
+	res = res[:min(len(pubDer), 6)] // only keep 6 digits
+	return fmt.Sprintf("%X", res)
 }

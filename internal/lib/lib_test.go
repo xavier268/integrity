@@ -48,7 +48,9 @@ func TestSignValid(t *testing.T) {
 			t.Error("should not accept invalid credentials")
 		}
 
-		privDer, pubDer := GenerateKeys()
+		privDer := GenerateKeys()
+		pubDer := DerivePubKey(privDer)
+
 		// Parse private and public keys
 		privK, err = x509.ParseECPrivateKey(privDer)
 		if err != nil {

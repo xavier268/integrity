@@ -6,21 +6,39 @@ Sign a binary or validate if it should run.
 
 ## How to use it
 
+````bash
+$> task
+task: [default] task --list-all
+task: Available tasks for this project:
+* build:          build sign utility
+* clean:          clean caches and binaries, and test dirs
+* default:        default task will display task menu
+* example:        run example
+* generate:       generate a new key pair
+* godoc:          launch godoc viewer and open browser page on windows
+* test:           run tests
 
-### Build the signing tool
+````
+
+   
+## To create a signed and controlled application
+
+
+### (Re)genarate a key pair
 
 ```bash
-task build
-
+$> task generate
 ```
-   
-### Create you binary as usual, importing this package, an validating the provided credential
+This Task will generate a key pair, and build the signing tool and run tests.
 
-For instance, main could start like this :
+### Create your signable app 
+
+Just create any app, but make sure it imports the 'valid' package.
+Then, you can grant access by providing the credential that was used to sign.
+
+Example :
 
 ```go
-
-
 import (
 	"flag"
 	"fmt"
@@ -51,34 +69,29 @@ func main() {
 	// ... do things ...
 
 }
-
-
 ```
 
 ### Use the "sign" tool to sign the built binary
 
-**Caution** : I would make sens to include the signing process into your build pipeline.
+**Caution** : It would make sense to include the signing process into your build pipeline.
 Without a correct credential setup, the executable will refuse to launch.
 
-```bash
+Example :
 
-sign.exe [ -p "credentials" -o "path/to/signedoutputbinary" ]  "path/to/unsignadebinary" 
+```bash
+$> sign.exe  -p "mypassword" -o "path/to/myapp/signed-binary"   "path/to/myapp/binary" 
 
 ```
 
-**Note** : it is ok to set the output filename to the input filename to modify executable in place.
+**Notes** : 
+* You may set the output filename to the input filename if you so wish.
+* You may sign an already signed binary with new credentials and/or new key and it will work.
+* If no keypair is defined, signing will just use a hash. Less secure, same functionnality.
 
-### Use the signed and secured copy of the binary. 
+### Using the signed and secured copy of your app
    
-    * The signed copy will only load with a valid credential
-    * If a single byte of the binary is modified, added or removed, it will refuse to run
-    * The signed executable file can be renamed or moved freely
-    * Obviously, no credentials can be extracted from the binary code.
+* The signed copy will only load with a valid credential
+* If a single byte of the binary is modified, added or removed, it will refuse to run
+* The signed executable file can be renamed or moved freely
+* Obviously, no credentials can be extracted from the binary code.
 
-
-# TODO
-
-Think about the API to generate/use the private/public keypairs needed ?
-* have a task to generate them as separate files that can be embedded as values in Sign (private key) and Integrity (public key) ?
-* generate them in a separate directy (internal) - embed this dir as a FS and check if the key files are available or not ?
-* hide visibility of keys outside lib ?

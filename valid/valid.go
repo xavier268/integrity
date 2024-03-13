@@ -29,3 +29,9 @@ func IsValid(credentials string) bool {
 
 	return lib.IsValid(credentials, pubDer)
 }
+
+// Return a short hash of the public key used
+func KeyID() string {
+	return lib.KeyId(pubDer)
+
+}

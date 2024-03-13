@@ -33,6 +33,7 @@ tasks:
     desc: build sign utility
     sources: # what triggers rebuild
       - ./**/*go
+      - ./**/*.der
     cmds:
       - go mod tidy
       - go build -o bin/sign{{.EXE}} ./sign
@@ -72,6 +73,16 @@ tasks:
     cmds:
       - go test ./...
       - ./bin/sign{{.EXE}} -p okpass ./bin/example{{.EXE}} # implement "me" as password
+      - echo "access should be granted"
       - ./bin/signed-example{{.EXE}} -p okpass # should be ok
+      - echo "access should be denied"
       - ./bin/signed-example{{.EXE}} -p failpass # should fail
-      - ./bin/example{{.EXE}} -p me # should fail
+      - echo "access should be denied"
+      - ./bin/example{{.EXE}} -p okpass # should fail
+
+  generate:
+    desc: generate a new key pair
+    cmds: 
+      - go generate ./...
+      - task build test
+

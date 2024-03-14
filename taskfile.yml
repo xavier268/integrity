@@ -39,7 +39,7 @@ tasks:
       - go build -o bin/sign{{.EXE}} ./sign
 
   example:
-    desc: run example
+    desc: build example (unsigned)
     deps:
       - build
     cmds:
@@ -80,9 +80,9 @@ tasks:
       - echo "access should be granted"
       - ./bin/signed-example{{.EXE}} -p okpass # should be ok
       - echo "access should be denied"
-      - ./bin/signed-example{{.EXE}} -p failpass # should fail
+      - ./bin/signed-example{{.EXE}} -p failpass # should fail, wrong password
       - echo "access should be denied"
-      - ./bin/example{{.EXE}} -p okpass # should fail
+      - ./bin/example{{.EXE}} -p okpass # should fail, good password but unsigned file
 
   generate:
     desc: generate a new key pair

@@ -42,9 +42,8 @@ Example :
 import (
 	"flag"
 	"fmt"
-	"os"
 
-	"github.com/xavier268/integrity"
+	"github.com/xavier268/integrity/valid"
 )
 
 var passw string
@@ -54,21 +53,16 @@ func init() {
 }
 
 func main() {
-
-    	// read password from command line
 	flag.Parse()
-
-    	// validate credentials
-	if !integrity.IsValid(passw) { 
-		fmt.Println("Access is denied")
+	// The ID of the key is available to check consistency when signing.
+	fmt.Println("Validating with key :", valid.KeyID())
+	if !valid.IsValid(passw) { // validate credentials
+		fmt.Println("Access is DENIED")
 		return
 	}
-
 	// Access is granted !
-	fmt.Println("Access IS granted")
+	fmt.Println("Access is GRANTED")
 	// ... do things ...
-
-}
 ```
 
 ### Use the "sign" tool to sign the built binary

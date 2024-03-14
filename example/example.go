@@ -18,7 +18,7 @@ func main() {
 
 	flag.Parse()
 
-	// The ID of the key is available to check consitency when signing.
+	// The ID of the key is available to check consistency when signing.
 	fmt.Println("Validating with key :", valid.KeyID())
 
 	if !valid.IsValid(passw) { // validate credentials

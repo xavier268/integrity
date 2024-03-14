@@ -153,6 +153,10 @@ func main() {
 		secDer = nil
 	}
 	saved := lib.SignBinary(infile, outfile, credential, secDer)
+
+	// Make saved file executable
+	os.Chmod(saved, 0755)
+
 	fmt.Printf("File %s was signed with %s and saved to  %s\n", infile, KeyId(), saved)
 }
 

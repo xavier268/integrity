@@ -24,7 +24,7 @@ task: Available tasks for this project:
 ## To create a signed and controlled application
 
 
-### (Re)genarate a key pair
+### (Re)generate a key pair
 
 ```bash
 $> task generate
